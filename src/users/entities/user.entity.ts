@@ -4,7 +4,7 @@ import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 
 import { Project } from 'src/projects/entities/project.entity';
 import { InternalServerErrorException } from '@nestjs/common';
 import { IsEmail, IsEnum, IsInt, IsString } from 'class-validator';
-import { Todo } from 'src/projects/entities/todo.entity';
+import { Todo } from 'src/todos/entities/todo.entity';
 
 enum LoginMethod {
   Local = 'local',
