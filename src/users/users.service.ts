@@ -16,9 +16,9 @@ export class UsersService {
         throw Error('User already exists with email');
       }
       const user = await this.users.save(this.users.create(args));
-      return { ok: true, result: user };
+      return { ok: true, statusCode: 200, result: user };
     } catch (error) {
-      return { ok: false, error };
+      return { ok: false, statusCode: 400, message: error.message };
     }
   }
 
@@ -33,9 +33,9 @@ export class UsersService {
         throw Error('Password is wrong');
       }
       const token = this.jwtService.sign(user.id);
-      return { ok: true, token };
+      return { ok: true, statusCode: 200, token };
     } catch (error) {
-      return { ok: false, error };
+      return { ok: false, statusCode: 400, message: error.message };
     }
   }
 }

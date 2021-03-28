@@ -7,8 +7,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ProjectsModule } from './projects/projects.module';
 import { User } from './users/entities/user.entity';
 import { Project } from './projects/entities/project.entity';
-import { Todo } from './projects/entities/todo.entity';
-import { CoreModule } from './core/core.module';
+import { Todo } from './todos/entities/todo.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { TodosModule } from './todos/todos.module';
 
@@ -37,10 +36,9 @@ import { TodosModule } from './todos/todos.module';
       logging: true,
     }),
     GraphQLModule.forRoot({ autoSchemaFile: true }),
+    JwtModule.forRoot({ jwtSecretKey: process.env.JWT_SECRET }),
     UsersModule,
     ProjectsModule,
-    CoreModule,
-    JwtModule,
     TodosModule,
   ],
   controllers: [],
