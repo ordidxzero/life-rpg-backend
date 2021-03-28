@@ -2,11 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from 'src/jwt/jwt.service';
 import { CreateUserArgs, CreateUserResponse } from './dtos/create.dto';
 import { LoginArgs, LoginResponse } from './dtos/login.dto';
+import { User } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly users: UserRepository, private readonly jwtService: JwtService) {}
+
+  findById(id: string): Promise<User> {
+    return this.users.findOne({ id });
+  }
 
   async createUser(args: CreateUserArgs): Promise<CreateUserResponse> {
     const { email } = args;
