@@ -13,6 +13,9 @@ import { TodosModule } from './todos/todos.module';
 import { JwtMiddleware } from './jwt/jwt.middlewares';
 import { AuthModule } from './auth/auth.module';
 import { DiariesModule } from './diaries/diaries.module';
+import { Diary } from './diaries/entities/diary.entity';
+import { ExperiencesModule } from './experiences/experiences.module';
+import { Experience } from './experiences/entities/experience.entity';
 
 @Module({
   imports: [
@@ -34,7 +37,7 @@ import { DiariesModule } from './diaries/diaries.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Project, Todo],
+      entities: [User, Project, Todo, Diary, Experience],
       synchronize: true,
       logging: true,
     }),
@@ -48,6 +51,7 @@ import { DiariesModule } from './diaries/diaries.module';
     TodosModule,
     AuthModule,
     DiariesModule,
+    ExperiencesModule,
   ],
   controllers: [],
   providers: [],

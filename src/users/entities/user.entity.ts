@@ -1,10 +1,12 @@
 import * as bcrypt from 'bcrypt';
-import { Field, Float, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Project } from 'src/projects/entities/project.entity';
 import { InternalServerErrorException } from '@nestjs/common';
-import { IsEmail, IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 import { Todo } from 'src/todos/entities/todo.entity';
+import { Diary } from 'src/diaries/entities/diary.entity';
+import { Experience } from 'src/experiences/entities/experience.entity';
 
 enum LoginMethod {
   Local = 'local',
@@ -59,24 +61,6 @@ export class User {
   @Field(type => String, { nullable: true })
   avatar: string; // 프로필 사진 -> social login의 avatar를 설정하거나 프로필 사진을 올릴 수 있도록 할 것
 
-  @Column({ default: 1 })
-  @IsInt()
-  @IsOptional()
-  @Field(type => Int, { nullable: true })
-  level: number; // 현재 레벨, 기본값 1
-
-  @Column({ default: 0 })
-  @IsInt()
-  @IsOptional()
-  @Field(type => Int, { nullable: true })
-  totalExp: number; // 현재까지 모은 누적 경험치, 기본값 0
-
-  @Column({ default: 1 })
-  @IsInt()
-  @IsOptional()
-  @Field(type => Float, { nullable: true })
-  expIncreaseRate: number; // 경험치 상승률, 기본값 1
-
   @OneToMany(() => Project, project => project.user)
   @Field(type => [Project])
   projects: Project[];
@@ -84,6 +68,14 @@ export class User {
   @OneToMany(() => Todo, todo => todo.user)
   @Field(type => [Todo])
   todos: Todo[];
+
+  @OneToMany(() => Diary, diary => diary.user)
+  @Field(type => [Diary])
+  diaries: Diary[];
+
+  @OneToOne(() => Experience, experience => experience.user)
+  @Field(type => Experience)
+  experience: Experience;
 
   @BeforeInsert()
   async hashPassword() {
