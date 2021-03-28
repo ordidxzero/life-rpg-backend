@@ -8,12 +8,12 @@ export class CreateUserArgs extends PickType(User, [
   'password',
   'loginMethod',
   'nickname',
-  'startDate',
+  'birthDate',
   'avatar',
 ]) {}
 
 @ObjectType()
 export class CreateUserResponse extends CoreResponse {
-  @Field(type => User)
+  @Field(type => User, { nullable: true })
   result?: User;
 }

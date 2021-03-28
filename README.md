@@ -28,7 +28,7 @@ Life RPG의 Backend 부분이다.
     - [ ] 비밀 일기 <-> 일반 일기 변경만 가능
     - [ ] 일기 삭제 / 내용 변경 가능하게 할까?
 - User
-  - [ ] Local Login 구현
-    - [ ] Social Login은 Flow가 어떻게 되는지 확실하지 않아서 보류
+  - [x] Local Login 구현
+  - [ ] Social Login은 Flow가 어떻게 되는지 확실하지 않아서 보류
 
 ## MODELING

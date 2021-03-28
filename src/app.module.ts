@@ -12,6 +12,7 @@ import { JwtModule } from './jwt/jwt.module';
 import { TodosModule } from './todos/todos.module';
 import { JwtMiddleware } from './jwt/jwt.middlewares';
 import { AuthModule } from './auth/auth.module';
+import { DiariesModule } from './diaries/diaries.module';
 
 @Module({
   imports: [
@@ -37,12 +38,16 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
       logging: true,
     }),
-    GraphQLModule.forRoot({ autoSchemaFile: true }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+      context: ({ req }) => ({ user: req.user }),
+    }),
     JwtModule.forRoot({ jwtSecretKey: process.env.JWT_SECRET }),
     UsersModule,
     ProjectsModule,
     TodosModule,
     AuthModule,
+    DiariesModule,
   ],
   controllers: [],
   providers: [],

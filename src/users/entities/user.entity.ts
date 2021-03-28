@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcrypt';
 import { Field, Float, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Project } from 'src/projects/entities/project.entity';
 import { InternalServerErrorException } from '@nestjs/common';
-import { IsEmail, IsEnum, IsInt, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { Todo } from 'src/todos/entities/todo.entity';
 
 enum LoginMethod {
@@ -25,9 +25,13 @@ export class User {
   @Field(type => String)
   id: string;
 
-  @Column()
+  @CreateDateColumn()
   @Field(type => Date)
-  startDate: Date; // 사용자가 태어난 날짜 or 앱을 시작한 날짜로 정할 수 있음
+  createdAt: Date;
+
+  @Column()
+  @Field(type => Date, { nullable: true, defaultValue: new Date() }) // 프론트엔드에서 date picker 구현 후 수정할 것
+  birthDate: Date;
 
   @Column()
   @IsString()
@@ -49,24 +53,28 @@ export class User {
   @Field(type => LoginMethod)
   loginMethod: LoginMethod;
 
-  @Column()
+  @Column({ default: 'https://iupac.org/wp-content/uploads/2018/05/default-avatar.png' })
   @IsString()
-  @Field(type => String)
+  @IsOptional()
+  @Field(type => String, { nullable: true })
   avatar: string; // 프로필 사진 -> social login의 avatar를 설정하거나 프로필 사진을 올릴 수 있도록 할 것
 
-  @Column()
+  @Column({ default: 1 })
   @IsInt()
-  @Field(type => Int, { nullable: true, defaultValue: 1 })
+  @IsOptional()
+  @Field(type => Int, { nullable: true })
   level: number; // 현재 레벨, 기본값 1
 
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
-  @Field(type => Int, { nullable: true, defaultValue: 0 })
+  @IsOptional()
+  @Field(type => Int, { nullable: true })
   totalExp: number; // 현재까지 모은 누적 경험치, 기본값 0
 
-  @Column()
+  @Column({ default: 1 })
   @IsInt()
-  @Field(type => Float, { nullable: true, defaultValue: 1 })
+  @IsOptional()
+  @Field(type => Float, { nullable: true })
   expIncreaseRate: number; // 경험치 상승률, 기본값 1
 
   @OneToMany(() => Project, project => project.user)
