@@ -3,25 +3,24 @@ import { User } from 'src/users/entities/user.entity';
 import { UpdateExperienceArgs, UpdateExperienceResponse } from './dtos/update.dto';
 import { Experience } from './entities/experience.entity';
 import { ExperienceRepository } from './repositories/experience.repository';
+import { YearExperiencesService } from './year-experiences.service';
 
 @Injectable()
 export class ExperiencesService {
-  constructor(private readonly experiences: ExperienceRepository) {}
+  constructor(
+    private readonly experiences: ExperienceRepository,
+    private readonly yearExperiencesService: YearExperiencesService,
+  ) {}
 
   createExperience(user: User): Promise<Experience> {
     return this.experiences.save(this.experiences.create({ user }));
   }
 
-  async updateExperience({
-    id,
-    level,
-    totalExp,
-    expIncreaseRate,
-  }: UpdateExperienceArgs): Promise<UpdateExperienceResponse> {
+  async updateExperience({ id, level, exp, expIncreaseRate }: UpdateExperienceArgs): Promise<UpdateExperienceResponse> {
     try {
       const experience = await this.experiences.updateOneAndReturn(id, {
         ...(level && { level }),
-        ...(totalExp && { totalExp }),
+        ...(exp && { exp }),
         ...(expIncreaseRate && { expIncreaseRate }),
       });
       return { ok: true, statusCode: 200, result: experience };

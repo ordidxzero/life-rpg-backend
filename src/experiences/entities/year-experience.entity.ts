@@ -1,12 +1,12 @@
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, IsNumber, IsOptional } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @InputType({ isAbstract: true })
 @ObjectType()
-export class Experience {
+export class YearExperience {
   @PrimaryGeneratedColumn('uuid')
   @Field(type => String)
   id: string;
@@ -23,14 +23,11 @@ export class Experience {
   @Field(type => Number, { nullable: true })
   exp: number; // 누적 경험치, 기본값 0
 
-  @Column({ default: 1 })
-  @IsNumber()
-  @IsOptional()
-  @Field(type => Number, { nullable: true })
-  expIncreaseRate: number; // 경험치 상승률, 기본값 1
+  @Column({ default: new Date().getFullYear() })
+  @Field(type => Int, { nullable: true })
+  year: number;
 
-  @OneToOne(type => User, user => user.experience, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @ManyToOne(type => User, user => user.experience, { onDelete: 'CASCADE' })
   @Field(type => User)
   user: User;
 }

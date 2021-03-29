@@ -7,6 +7,7 @@ import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 import { Todo } from 'src/todos/entities/todo.entity';
 import { Diary } from 'src/diaries/entities/diary.entity';
 import { Experience } from 'src/experiences/entities/experience.entity';
+import { YearExperience } from 'src/experiences/entities/year-experience.entity';
 
 enum LoginMethod {
   Local = 'local',
@@ -76,6 +77,10 @@ export class User {
   @OneToOne(() => Experience, experience => experience.user)
   @Field(type => Experience)
   experience: Experience;
+
+  @OneToMany(() => YearExperience, yearExperience => yearExperience.user)
+  @Field(type => [YearExperience])
+  yearExperiences: YearExperience[];
 
   @BeforeInsert()
   async hashPassword() {
